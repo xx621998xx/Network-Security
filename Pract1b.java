@@ -1,0 +1,67 @@
+// Source : http://beta.studentitzone.com/UI/viewarticle/Mono-Alphabetic-Encryption-and-Decryption-Program-in-Java
+
+class MonoAlphabetic {
+    private final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+    private String newKey = "";
+    private static int isGenerated = 0;
+    private void generateKey(String userKey)
+    {
+        // removing duplicate charaters from user key
+        userKey = userKey.toLowerCase();
+        for(int i=0;i<userKey.length();i++)
+        {
+            int flag = 0;
+            for(int j=0;j<this.newKey.length();j++)
+            {
+                if(userKey.charAt(i)==newKey.charAt(j))
+                {
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag==0)
+                this.newKey += userKey.charAt(i);
+        }
+        if(isGenerated==0){
+            isGenerated = 1;
+            this.generateKey(this.newKey+""+this.ALPHABET);
+        }
+    }
+    public String encrypt(String plainText, String userKey)
+    {
+        this.generateKey(userKey);
+        String cipherText = "";
+        String tmpStr = plainText;
+        for(int i=0;i<plainText.length();i++)
+        {
+            char replaceVal = this.newKey.charAt(this.ALPHABET.indexOf(plainText.charAt(i)));
+            tmpStr = tmpStr.replace(tmpStr.charAt(i),replaceVal);
+        }
+        cipherText = tmpStr;
+        return cipherText;
+    }
+    
+    public String decrypt(String cipherText, String userKey)
+    {
+        this.generateKey(userKey);
+        String plainText = "";
+        String tmpStr = cipherText;
+        for(int i=0;i<cipherText.length();i++)
+        {
+            char replaceVal = this.ALPHABET.charAt(this.newKey.indexOf(cipherText.charAt(i)));
+            tmpStr = tmpStr.replace(tmpStr.charAt(i),replaceVal);
+        }
+        plainText = tmpStr;
+        return plainText;
+    }
+}
+
+class MonoAlphabeticDemo {
+    public static void main(String args[])
+    {
+        MonoAlphabetic ma = new MonoAlphabetic();
+        String en = ma.encrypt("hihowareyou","studentitzone");
+        String de = ma.decrypt(en,"studentitzone");
+        System.out.println(en + " - " + de);
+    }
+}
